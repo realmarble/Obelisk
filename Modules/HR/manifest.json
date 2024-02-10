@@ -1,0 +1,15 @@
+{
+    "routes": [
+      {
+        "name": "index",
+        "path": "/",
+        "controller": "HrController::index"
+      },
+      {
+        "name": "profile",
+        "path": "/profile",
+        "controller": "HrController::profile"
+      }
+    ]
+  }
+  
