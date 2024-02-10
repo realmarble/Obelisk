@@ -11,7 +11,6 @@ class ModuleListController extends AbstractController
     #[Route('/modulelist', name: 'app_module_list')]
     public function index(): Response
     {
-        // Assuming your JSON content is stored in a file named 'data.json'.
         $jsonFilePath = '../config.json';
 
         // Read the JSON file
