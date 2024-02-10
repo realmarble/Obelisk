@@ -1,21 +1,13 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
+# config/services.yaml
 
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    # Put parameters here if needed
 
 services:
-    # default configuration for services in *this* file
-    App\Routing\ModuleRouteLoader:
-        tags:
-            - { name: routing.loader }
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true
+        autoconfigure: true
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
@@ -23,5 +15,12 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Define your custom route loader service
+    App\Routing\CustomRouteLoader:
+        tags:
+            - { name: routing.loader }
+    Modules\:
+        resource: '../Modules/'
+        exclude: '../Modules/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # Add more service definitions here if needed

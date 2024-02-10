@@ -1,8 +1,10 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
-    app_custom_routes:
-        resource: .
-        type: custom
+    resource: '../src/Controller/'
+    type:     attribute
+
+# config/routes.yaml
+
+app_custom_routes:
+    resource: .
+    type: custom
+
