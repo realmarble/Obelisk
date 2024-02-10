@@ -1,5 +1,9 @@
 {
-    "modules":[
-        {"name":"HR","location":"/hr","active":true}
-    ]
+"modules": [
+    { "name": "HR", "location": "/hr", "active": true, "subroute":"hr" },
+    { "name": "Finance", "location": "/finance", "active": false },
+    { "name": "Legal", "location": "/legal", "active": false },
+    { "name": "Ops", "location": "/operations", "active": false },
+    { "name": "Inventory", "location": "/inventory", "active": false }
+] 
 }
