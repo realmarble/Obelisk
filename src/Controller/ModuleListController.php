@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ModuleListController extends AbstractController
 {
-    #[Route('/modulelist', name: 'app_module_list')]
+    #[Route('/modulelist', name: 'module_list')]
     public function index(): Response
     {
         // Assuming your JSON content is stored in a file named 'data.json'.

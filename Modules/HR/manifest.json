@@ -1,15 +1,20 @@
 {
+    "name": "HR",
+    "description": "A module for HR functionalities",
     "routes": [
       {
         "name": "index",
         "path": "/",
-        "controller": "HrController::index"
+        "controller": "Controllers\\HrController::index"
       },
       {
         "name": "profile",
         "path": "/profile",
-        "controller": "HrController::profile"
+        "controller": "Controllers\\HrController::profile"
       }
+    ],
+    "tables": [
+        "Assembly\\Employee"
     ]
-  }
+}
   

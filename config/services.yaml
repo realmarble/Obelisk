@@ -22,5 +22,6 @@ services:
     Modules\:
         resource: '../Modules/'
         exclude: '../Modules/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-
-    # Add more service definitions here if needed
+    App\EventListener\RunOnce:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }

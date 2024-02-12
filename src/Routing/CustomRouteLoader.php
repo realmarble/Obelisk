@@ -30,8 +30,8 @@ class CustomRouteLoader extends Loader
 
                 $moduleManifest = json_decode(file_get_contents($moduleManifestPath), true);
 
-                // Assuming namespace base for modules follows Modules\{ModuleName}\Controllers convention
-                $namespaceBase = 'Modules\\' . str_replace('/', '\\', $module['name']) . '\\Controllers\\';
+                // Assuming namespace base for modules follows Modules\{ModuleName} convention
+                $namespaceBase = 'Modules\\' . str_replace('/', '\\', $module['name']) . '\\';
 
                 foreach ($moduleManifest['routes'] as $routeInfo) {
                     // Determine the path for the route
