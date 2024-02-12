@@ -11,6 +11,11 @@
         "name": "profile",
         "path": "/profile",
         "controller": "Controllers\\HrController::profile"
+      },
+      {
+        "name": "doctrinetest",
+        "path": "/doctrinetest",
+        "controller": "Controllers\\EmployeeController::test"
       }
     ],
     "tables": [
