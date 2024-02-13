@@ -5,17 +5,20 @@
       {
         "name": "index",
         "path": "/",
-        "controller": "Controllers\\HrController::index"
+        "controller": "Controllers\\HrController::index",
+        "methods": ["GET"]
       },
       {
         "name": "profile",
         "path": "/profile",
-        "controller": "Controllers\\HrController::profile"
+        "controller": "Controllers\\HrController::profile",
+        "methods": ["GET"]
       },
       {
         "name": "doctrinetest",
         "path": "/doctrinetest",
-        "controller": "Controllers\\EmployeeController::test"
+        "controller": "Controllers\\EmployeeController::test",
+        "methods": ["POST"]
       }
     ],
     "tables": [

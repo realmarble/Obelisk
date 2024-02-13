@@ -43,11 +43,18 @@ class CustomRouteLoader extends Loader
                     // Define the route with the constructed controller class
                     $route = new Route(
                         $routePath,
-                        ['_controller' => $controllerClass]
+                        ['_controller' => $controllerClass],
+                        [], // Parameters
+                        [], // Options
+                        '', // Host
+                        [], // Schemes
+                        $routeInfo['methods'] ?? [], // Request methods
+                        '' // Condition
                     );
                 
                     $routes->add($module['subroute'] . $routeInfo['name'], $route);
                 }
+                
             }
         }
 

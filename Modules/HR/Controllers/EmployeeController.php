@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use Modules\HR\Entity\Employee;
+use Symfony\Component\HttpFoundation\Request;
 
 class EmployeeController extends AbstractController
 {
@@ -11,22 +12,26 @@ class EmployeeController extends AbstractController
     {
         return $this->json(['identityid' => null]);
     }
-    public function test(EntityManagerInterface $entityManager): Response
+    public function test(EntityManagerInterface $entityManager,Request $request): Response
     {
-        $employee = new Employee();
-        $employee->setIdentityid('123');
-        $employee->setFirstName('John');
-        $employee->setLastName('Doe');
-        $employee->setPosition('Software Developer');
-        $employee->setSalary(60000);
-        $employee->setHired(new \DateTime('2021-06-01'));
-        $employee->setBirthDate(new \DateTime('1980-01-01'));
-        $employee->setAddress('123 Main St');
-        $employee->setEmployed(true);
-        $entityManager->persist($employee);
-        $entityManager->flush();
+        $content = $request->getContent();
+        $data = json_decode($content);
+         $employee = new Employee();
+         $employee->setIdentityid("placeholdder");
+         $employee->setFirstName("placeholdder");
+         $employee->setLastName("placeholdder");
+         $employee->setPosition("placeholdder");
+         $employee->setSalary(6000);
+         $employee->setHired(new \DateTime("1970-01-01"));
+         $employee->setBirthDate(new \DateTime("1970-01-01"));
+         $employee->setAddress("placeholder");
+         $employee->setEmployed(true);
+         $employee->setFired(new \DateTime("1970-01-01"));
+         $entityManager->persist($employee);
+         $entityManager->flush();
         // Other fields can be filled in a similar manner
-        return $this->json(['status' => 'success']);
+        
+        return $this->json($data);
     }
 
     public function profile(): Response
