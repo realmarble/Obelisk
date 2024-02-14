@@ -59,7 +59,7 @@ public function Count(array $criteria = []): int{
             ->getQuery()
             ->getSingleScalarResult();
 }
-public function RemoveById($id): bool
+public function RemoveById($id): bool //return true if success, and false for failure.
 {
     $entity = $this->find($id);
     if ($entity) {
@@ -71,11 +71,11 @@ public function RemoveById($id): bool
         } catch (\Exception $e) {
             // Log exception if needed
             return false;
+            //failure failure failure failure failure failure failure failure failure failure
         }
     }
     return false;
 }
-public function GetEmployee($data): ?Employee{}
 public function getEmployees($data): ?array {
     $queryBuilder = $this->createQueryBuilder('e');
     foreach ($data as $key => $value) {
@@ -105,9 +105,7 @@ public function DisplayEmployeesRange(int $start, int $end, string $sortBy = 'id
     try {
         $employees = $this->findBy([], [$sortBy => $sortOrder], $end, $start - 1);
 
-        return $this->json([
-            'data' => $employees
-        ]);
+        return $employees;
     } catch (Throwable $e) {
         return null;
     }
