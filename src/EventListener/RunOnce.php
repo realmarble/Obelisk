@@ -11,18 +11,20 @@ class RunOnce
     private $dotenv;
     private $entityManager;
     private $Executed = false;
-    public function __construct(EntityManagerInterface $entityManager) {
+    public function __construct(EntityManagerInterface $entityManager)
+    {
         $dotenv = new Dotenv();
-        $dotenv->load(__DIR__.'/../../.env');
+        $dotenv->load(__DIR__ . '/../../.env');
         $this->entityManager = $entityManager;
     }
-    private function ExecuteTableMigrations(){
-    $rundb = getenv('RUN_DATABASE_CREATION');
-    if (!$rundb) { // if env says to not run the db creator, then don't
-        return;
-    }
-    $connection = $this->entityManager->getConnection();
-    $config = json_decode(file_get_contents(__DIR__ . '/../../config.json'), true);
+    private function ExecuteTableMigrations()
+    {
+        $rundb = getenv('RUN_DATABASE_CREATION');
+        if (!$rundb) { // if env says to not run the db creator, then don't
+            return;
+        }
+        $connection = $this->entityManager->getConnection();
+        $config = json_decode(file_get_contents(__DIR__ . '/../../config.json'), true);
 
         foreach ($config['modules'] as $module) {
             if ($module['active']) {
@@ -37,23 +39,23 @@ class RunOnce
                 // Assuming namespace base for modules follows Modules\{ModuleName} convention
                 $namespaceBase = 'Modules\\' . str_replace('/', '\\', $module['name']) . '\\';
 
-                foreach ($moduleManifest['tables'] as $Table) {                
+                foreach ($moduleManifest['tables'] as $Table) {
                     // Construct the full class name for the controller
                     $AssemblyClass = $namespaceBase . str_replace('/', '\\', $Table);
                     $Assembly = new $AssemblyClass();
                     $connection->beginTransaction();
-try {
-    // Perform your database operations here
-    $connection->executeStatement($Assembly->up());
-    
-    // Commit the transaction if all operations were successful
-    $connection->commit();
-} catch (\Exception $e) {
-    // Rollback the transaction if an exception occurs
-    $connection->rollback();
-    // Handle the exception
-    // Log or rethrow the exception
-}
+                    try {
+                        // Perform your database operations here
+                        $connection->executeStatement($Assembly->up());
+
+                        // Commit the transaction if all operations were successful
+                        $connection->commit();
+                    } catch (\Exception $e) {
+                        // Rollback the transaction if an exception occurs
+                        $connection->rollback();
+                        // Handle the exception
+                        // Log or rethrow the exception
+                    }
 
                 }
             }

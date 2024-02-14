@@ -72,13 +72,43 @@ public function Create(EntityManagerInterface $entityManager, Request $request):
         //return the amount of employees in the database. used for correctly formatting the display.
         //if it ever actually materializes.
         $count = $Repository->Count();
-        return $this->json(['message' => $count]);
+        return $this->json(['data' => $count]);
     }
     public function GetEmployees(Request $request,EmployeeRepository $Repository): Response{
         //returns list of employees based on the filters/values specified in the JSON POST request supplied to it.
         $content = $request->getContent();
         $data = json_decode($content); //get the data of the POST request
         $result = $Repository->GetEmployees($data); //this method works only on the basis of shit-fuck. i Suggest for whoever wrote it to either not use it, or completely rewrite it.
-        return $this->json(['message' => $result]);
+        return $this->json(['data' => $result]);
+    }
+    public function DisplayFirstXEmployees(Request $request, EmployeeRepository $Repository, int $amount, string $sortBy = 'id', string $sortOrder = 'ASC'): Response
+    {
+        // This method displays the first X employees from the database with optional sorting by column values.
+        try {
+            $employees = $Repository->findBy([], [$sortBy => $sortOrder], $amount);
+
+            return $this->json([
+                'data' => $employees
+            ]);
+        } catch (Throwable $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+    public function DisplayEmployeesRange(Request $request, EmployeeRepository $Repository, int $start, int $end, string $sortBy = 'id', string $sortOrder = 'ASC'): Response
+    {
+        // This method displays a range of employees from X to Y from the database with optional sorting by column values.
+        try {
+            $employees = $Repository->findBy([], [$sortBy => $sortOrder], $end, $start - 1);
+
+            return $this->json([
+                'data' => $employees
+            ]);
+        } catch (Throwable $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }
