@@ -74,5 +74,19 @@ public function RemoveById($id): bool
     }
     return false;
 }
+public function GetEmployee($data): ?Employee{}
+public function getEmployees($data): ?array {
+    $queryBuilder = $this->createQueryBuilder('e');
+    foreach ($data as $key => $value) {
+        if ($value !== null && property_exists(Employee::class, $key)) {
+            $queryBuilder->andWhere("e.$key = :$key")
+                         ->setParameter($key, $value);
+        } elseif ($value === null && property_exists(Employee::class, $key)) {
+            $queryBuilder->andWhere("e.$key IS NULL"); //this supports if a key is null, for example when the fired property is null.
+            //of course for that you could simply check if employed is true, but i decided to do it this way for god knows why.
+        }
+    }
+    return $queryBuilder->getQuery()->getResult();
+}
 }
    

@@ -29,7 +29,7 @@
       {
         "name": "get_employee",
         "path": "/getemployee",
-        "controller": "Controllers\\EmployeeController::GetEmployee",
+        "controller": "Controllers\\EmployeeController::GetEmployees",
         "methods": ["POST"]
       }
     ],

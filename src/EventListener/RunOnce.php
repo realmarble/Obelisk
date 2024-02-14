@@ -16,7 +16,7 @@ class RunOnce
         $dotenv->load(__DIR__.'/../../.env');
         $this->entityManager = $entityManager;
     }
-    private function ExecuteTableMigrations(EntityManagerInterface $entityManager){
+    private function ExecuteTableMigrations(){
     $rundb = getenv('RUN_DATABASE_CREATION');
     if (!$rundb) { // if env says to not run the db creator, then don't
         return;
@@ -41,7 +41,20 @@ class RunOnce
                     // Construct the full class name for the controller
                     $AssemblyClass = $namespaceBase . str_replace('/', '\\', $Table);
                     $Assembly = new $AssemblyClass();
-                    $connection->executeStatement($Assembly->up());
+                    $connection->beginTransaction();
+try {
+    // Perform your database operations here
+    $connection->executeStatement($Assembly->up());
+    
+    // Commit the transaction if all operations were successful
+    $connection->commit();
+} catch (\Exception $e) {
+    // Rollback the transaction if an exception occurs
+    $connection->rollback();
+    // Handle the exception
+    // Log or rethrow the exception
+}
+
                 }
             }
         }
@@ -53,7 +66,7 @@ class RunOnce
         } //if not the main request, return
         if (!$this->Executed) {
             try {
-                $this->ExecuteTableMigrations($this->entityManager);
+                $this->ExecuteTableMigrations();
             } catch (\Throwable $th) {
                 //throw $th;
             }

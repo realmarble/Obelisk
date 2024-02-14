@@ -6,37 +6,79 @@ use Doctrine\ORM\EntityManagerInterface;
 use Modules\HR\Entity\Employee;
 use Modules\HR\Repository\EmployeeRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 class EmployeeController extends AbstractController
 {
-    public function Create(EntityManagerInterface $entityManager,Request $request): Response
-    {
+public function Create(EntityManagerInterface $entityManager, Request $request): Response
+{
+    try {
         $content = $request->getContent();
         $data = json_decode($content);
-         $employee = new Employee();
-         $employee->setIdentityid("placeholdder");
-         $employee->setFirstName("placeholdder");
-         $employee->setLastName("placeholdder");
-         $employee->setPosition("placeholdder");
-         $employee->setSalary(6000);
-         $employee->setHired(new \DateTime("1970-01-01"));
-         $employee->setBirthDate(new \DateTime("1970-01-01"));
-         $employee->setAddress("placeholder");
-         $employee->setEmployed(true);
-         $employee->setFired(new \DateTime("1970-01-01"));
-         $entityManager->persist($employee);
-         $entityManager->flush();
-        // this would make sense but if we parse the json data into this we get 4 different errors
-        
-        return $this->json($data);
+
+        $employee = new Employee();
+
+        // Define a mapping of JSON properties to setter methods
+        $mapping = [
+            'identityid' => 'setIdentityid',
+            'firstName' => 'setFirstName',
+            'lastName' => 'setLastName',
+            'position' => 'setPosition',
+            'salary' => 'setSalary',
+            'hired' => 'setHired',
+            'birthDate' => 'setBirthDate',
+            'address' => 'setAddress',
+            'employed' => 'setEmployed',
+            'fired' => 'setFired',
+        ];
+
+        foreach ($mapping as $jsonProp => $setterMethod) {
+            if (isset($data->$jsonProp)) {
+                $value = $data->$jsonProp;
+
+                // Special handling for DateTime properties
+                if (in_array($jsonProp, ['hired', 'birthDate', 'fired']) && $value !== null) {
+                    $value = new \DateTime($value);
+                }
+
+                // Call the setter method if it exists
+                if (method_exists($employee, $setterMethod)) {
+                    $employee->$setterMethod($value);
+                }
+            }
+        }
+
+        $entityManager->persist($employee);
+        $entityManager->flush();
+
+        // Assuming a method to serialize your employee exists
+        return $this->json([
+            'message' => 'Employee created successfully',
+            // You can serialize your employee here if needed
+        ]);
+    } catch (Throwable $e) {
+        // Log the error message for debugging purposes
+        // error_log($e->getMessage());
+
+        return $this->json([
+            'error' => $e,
+        ]);
     }
+}
+
 
     public function Count(EmployeeRepository $Repository): Response
     {
+        //return the amount of employees in the database. used for correctly formatting the display.
+        //if it ever actually materializes.
         $count = $Repository->Count();
         return $this->json(['message' => $count]);
     }
-    public function GetEmployee(){
-        return $this->json(['message' => "not implemented"]);
+    public function GetEmployees(Request $request,EmployeeRepository $Repository): Response{
+        //returns list of employees based on the filters/values specified in the JSON POST request supplied to it.
+        $content = $request->getContent();
+        $data = json_decode($content); //get the data of the POST request
+        $result = $Repository->GetEmployees($data); //this method works only on the basis of shit-fuck. i Suggest for whoever wrote it to either not use it, or completely rewrite it.
+        return $this->json(['message' => $result]);
     }
 }
