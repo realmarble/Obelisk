@@ -4,15 +4,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use Modules\HR\Entity\Employee;
+use Modules\HR\Repository\EmployeeRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class EmployeeController extends AbstractController
 {
-    public function auth(): Response
-    {
-        return $this->json(['identityid' => null]);
-    }
-    public function test(EntityManagerInterface $entityManager,Request $request): Response
+    public function Create(EntityManagerInterface $entityManager,Request $request): Response
     {
         $content = $request->getContent();
         $data = json_decode($content);
@@ -29,13 +26,17 @@ class EmployeeController extends AbstractController
          $employee->setFired(new \DateTime("1970-01-01"));
          $entityManager->persist($employee);
          $entityManager->flush();
-        // Other fields can be filled in a similar manner
+        // this would make sense but if we parse the json data into this we get 4 different errors
         
         return $this->json($data);
     }
 
-    public function profile(): Response
+    public function Count(EmployeeRepository $Repository): Response
     {
-        return $this->json(['message' => 'Hello from HR module profile action']);
+        $count = $Repository->Count();
+        return $this->json(['message' => $count]);
+    }
+    public function GetEmployee(){
+        return $this->json(['message' => "not implemented"]);
     }
 }

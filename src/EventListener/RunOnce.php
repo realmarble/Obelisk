@@ -4,15 +4,23 @@ namespace App\EventListener;
 
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Dotenv\Dotenv;
 
 class RunOnce
 {
+    private $dotenv;
     private $entityManager;
     private $Executed = false;
     public function __construct(EntityManagerInterface $entityManager) {
+        $dotenv = new Dotenv();
+        $dotenv->load(__DIR__.'/../../.env');
         $this->entityManager = $entityManager;
     }
     private function ExecuteTableMigrations(EntityManagerInterface $entityManager){
+    $rundb = getenv('RUN_DATABASE_CREATION');
+    if (!$rundb) { // if env says to not run the db creator, then don't
+        return;
+    }
     $connection = $this->entityManager->getConnection();
     $config = json_decode(file_get_contents(__DIR__ . '/../../config.json'), true);
 

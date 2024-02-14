@@ -15,9 +15,21 @@
         "methods": ["GET"]
       },
       {
-        "name": "doctrinetest",
-        "path": "/doctrinetest",
-        "controller": "Controllers\\EmployeeController::test",
+        "name": "create_employee",
+        "path": "/create",
+        "controller": "Controllers\\EmployeeController::Create",
+        "methods": ["POST"]
+      },
+      {
+        "name": "employee_count",
+        "path": "/count",
+        "controller": "Controllers\\EmployeeController::Count",
+        "methods": ["GET"]
+      },
+      {
+        "name": "get_employee",
+        "path": "/getemployee",
+        "controller": "Controllers\\EmployeeController::GetEmployee",
         "methods": ["POST"]
       }
     ],

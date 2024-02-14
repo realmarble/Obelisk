@@ -2,11 +2,14 @@
 
 namespace Modules\HR\Entity;
 
-use App\Repository\EmployeeRepository;
+use Modules\HR\Repository\EmployeeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EmployeeRepository::class)]
+
+
+//#[ORM\Entity]
+#[ORM\Entity(repositoryClass: EmployeeRepository::class)] //in case we want to define a repository
 class Employee
 {
     #[ORM\Id]
