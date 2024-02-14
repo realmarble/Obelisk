@@ -5,6 +5,7 @@ namespace Modules\HR\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Modules\HR\Entity\Employee;
+use Throwable;
 
 /**
  * @extends ServiceEntityRepository<Employee>
@@ -88,5 +89,29 @@ public function getEmployees($data): ?array {
     }
     return $queryBuilder->getQuery()->getResult();
 }
+public function DisplayFirstXEmployees(int $amount, string $sortBy = 'id', string $sortOrder = 'ASC'): array|null //return array, even an empty one if correct, null if error
+{
+    // This method displays the first X employees from the database with optional sorting by column values.
+    try {
+        $employees = $this->findBy([], [$sortBy => $sortOrder], $amount);
+        return $employees;
+    } catch (Throwable $e) {
+        return null;
+    }
 }
+public function DisplayEmployeesRange(int $start, int $end, string $sortBy = 'id', string $sortOrder = 'ASC'): array|null
+{
+    // This method displays a range of employees from X to Y from the database with optional sorting by column values.
+    try {
+        $employees = $this->findBy([], [$sortBy => $sortOrder], $end, $start - 1);
+
+        return $this->json([
+            'data' => $employees
+        ]);
+    } catch (Throwable $e) {
+        return null;
+    }
+}
+}
+
    

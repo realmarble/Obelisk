@@ -81,34 +81,4 @@ public function Create(EntityManagerInterface $entityManager, Request $request):
         $result = $Repository->GetEmployees($data); //this method works only on the basis of shit-fuck. i Suggest for whoever wrote it to either not use it, or completely rewrite it.
         return $this->json(['data' => $result]);
     }
-    public function DisplayFirstXEmployees(Request $request, EmployeeRepository $Repository, int $amount, string $sortBy = 'id', string $sortOrder = 'ASC'): Response
-    {
-        // This method displays the first X employees from the database with optional sorting by column values.
-        try {
-            $employees = $Repository->findBy([], [$sortBy => $sortOrder], $amount);
-
-            return $this->json([
-                'data' => $employees
-            ]);
-        } catch (Throwable $e) {
-            return $this->json([
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
-    public function DisplayEmployeesRange(Request $request, EmployeeRepository $Repository, int $start, int $end, string $sortBy = 'id', string $sortOrder = 'ASC'): Response
-    {
-        // This method displays a range of employees from X to Y from the database with optional sorting by column values.
-        try {
-            $employees = $Repository->findBy([], [$sortBy => $sortOrder], $end, $start - 1);
-
-            return $this->json([
-                'data' => $employees
-            ]);
-        } catch (Throwable $e) {
-            return $this->json([
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
 }
